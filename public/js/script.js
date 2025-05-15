@@ -32,3 +32,4 @@ taxSwitch.addEventListener("click", ()=>{
         }
     }
 })
+

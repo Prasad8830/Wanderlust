@@ -1,65 +1,78 @@
 <% layout('layouts/boilerplate') -%>
 <body>
-    <!-- <h3>All Listings</h3> -->
-    <!-- <form method="GET" action="/listings/new">
-        <button>Create New Listing</button>
-    </form> -->
-
-    <div class="" id="filters">
-        <div class="filter">
+   
+    <div class="filters-wrapper">
+      <div class="filters-row d-flex align-items-center px-3">
+        <!-- Scroll Left Button -->
+        <button id="scroll-left" class="scroll-btn me-2" aria-label="Scroll Left">
+          &laquo;
+        </button>
+    
+        <!-- Scrollable Filters -->
+        <div class="filters-container flex-grow-1" id="filters-scroll">
+          <!-- Filters -->
+          <div class="filter">
             <div><i class="fa-solid fa-fire"></i></div>
             <p>Trending</p>
-        </div>
-        <div class="filter">
+          </div>
+          <div class="filter">
             <div><i class="fa-solid fa-hotel"></i></div>
             <p>Hotels</p>
-        </div>
-        <div class="filter">
+          </div>
+          <div class="filter">
             <div><i class="fa-solid fa-house-chimney-window"></i></div>
             <p>Rooms</p>
-        </div>
-        <div class="filter">
+          </div>
+          <div class="filter">
             <div><i class="fa-solid fa-mountain-city"></i></div>
             <p>Iconic Cities</p>
-        </div>
-        <div class="filter">
+          </div>
+          <div class="filter">
             <div><i class="fa-solid fa-mountain-sun"></i></div>
             <p>Mountains</p>
-        </div>
-        <div class="filter">
+          </div>
+          <div class="filter">
             <div><i class="fa-brands fa-fort-awesome"></i></div>
             <p>Castels</p>
-        </div>
-        <div class="filter">
+          </div>
+          <div class="filter">
             <div><i class="fa-solid fa-person-swimming"></i></div>
             <p>Amazing Pools</p>
-        </div>
-        <div class="filter">
+          </div>
+          <div class="filter">
             <div><i class="fa-solid fa-umbrella-beach"></i></div>
             <p>Beachfront</p>
-        </div>
-        <div class="filter">
+          </div>
+          <div class="filter">
             <div><i class="fa-solid fa-campground"></i></div>
             <p>Camping</p>
-        </div>
-        <div class="filter">
+          </div>
+          <div class="filter">
             <div><i class="fa-solid fa-sailboat"></i></div>
             <p>Boats</p>
-        </div>
-        <div class="filter">
+          </div>
+          <div class="filter">
             <div><i class="fa-solid fa-igloo"></i></div>
             <p>Domes</p>
-        </div>
-        <div class="filter">
+          </div>
+          <div class="filter">
             <div><i class="fa-solid fa-snowflake"></i></div>
             <p>Arctic</p>
+          </div>
         </div>
-        <div class="tax-toggle">
-            <div class="form-check-reverse form-switch">
-                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
-                <label class="form-check-label" for="flexSwitchCheckDefault">Display total after Taxes</label>
-              </div>
+    
+        <!-- Scroll Right Button -->
+        <button id="scroll-right" class="scroll-btn ms-2" aria-label="Scroll Right">
+          &raquo;
+        </button>
+        <!-- Tax toggle -->
+      <div class="tax-toggle">
+        <div class="form-check form-switch ms-auto">
+          <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+          <label class="form-check-label" for="flexSwitchCheckDefault">Display total after Taxes</label>
         </div>
+      </div>
+      </div>
     </div>
 
     <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 row-cols-1 mt-3">
@@ -79,6 +92,7 @@
             </a>
         <% } %>
     </div>
+     <script src="/js/filter.js"></script>
 </body>
 
 
