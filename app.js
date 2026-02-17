@@ -69,10 +69,10 @@ const sessionOptions = {
 };
 
 
-// //root
-// app.get("/",(req,res)=>{
-//   res.send("Hi root is wroking");
-// })
+//root
+app.get("/",(req,res)=>{
+  res.redirect("/listings");
+})
 
 //sessions
 app.use(session(sessionOptions));
