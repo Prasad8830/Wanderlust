@@ -1,7 +1,8 @@
 <% layout('layouts/boilerplate') -%>
-<script>
+<script nonce="<%= cspNonce %>">
     window.mapTokenKey = "<%= process.env.MAP_TOKEN_KEY %>";
-    const listing = <%- JSON.stringify(listing) %>;
+    // only what the map needs, with < escaped so a title or location can't close the script tag
+    const listing = <%- JSON.stringify({location: listing.location, geometry: listing.geometry}).replace(/</g, "\\u003c") %>;
 </script>
 <body>
     <main class="container mt-3"> 
