@@ -1,14 +1,31 @@
 const { response } = require('express');
 const Listing = require('../models/listing');
 const axios = require('axios');
+const { categories, listingCategories } = require('../utils/categories');
 
 module.exports.index = async (req,res)=>{
-    const allListings = await Listing.find({});
-    res.render("listings/index.ejs", {allListings});
+    const q = (req.query.q || "").trim();
+    const category = req.query.category || "";
+    const filter = {};
+
+    if(q){
+      // escape regex special chars so user input is matched literally
+      const regex = new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i");
+      filter.$or = [{title: regex}, {location: regex}, {country: regex}];
+    }
+    if(listingCategories.includes(category)){
+      filter.category = category;
+    }
+
+    let allListings = await Listing.find(filter);
+    if(category === "trending"){
+      allListings.sort((a, b) => b.reviews.length - a.reviews.length);
+    }
+    res.render("listings/index.ejs", {allListings, categories, q, category});
 };
 
 module.exports.renderNewForm = (req,res)=>{
-    return res.render("listings/new.ejs");
+    return res.render("listings/new.ejs", {categories});
 };
 
 module.exports.showListing = async (req,res)=>{
@@ -64,7 +81,7 @@ module.exports.renderEditForm = async (req,res)=>{
   let original_image_url = listing.image.url;
   original_image_url = original_image_url.replace("/upload/", "/upload/w_250/");
 
-  return res.render("listings/edit.ejs", {listing, original_image_url});
+  return res.render("listings/edit.ejs", {listing, original_image_url, categories});
 };
 
 module.exports.updateListing = async (req, res)=>{

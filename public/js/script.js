@@ -35,3 +35,21 @@ if(taxSwitch) {
     });
 }
 
+// search: reload results when the query is cleared (e.g. with the x button)
+let searchInput = document.querySelector(".search-input");
+if(searchInput) {
+    let searchForm = searchInput.form;
+    searchForm.addEventListener("submit", ()=>{
+        // leave empty q out of the url
+        if(searchInput.value.trim() === ""){
+            searchInput.removeAttribute("name");
+        }
+    });
+    searchInput.addEventListener("input", ()=>{
+        let hasQuery = new URLSearchParams(window.location.search).has("q");
+        if(searchInput.value === "" && hasQuery){
+            searchForm.requestSubmit();
+        }
+    });
+}
+

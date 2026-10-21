@@ -1,4 +1,5 @@
 const Joi = require('joi');//joi is used insted of if else statments that we have to write for every key in schema
+const { listingCategories } = require('./utils/categories');
 
 module.exports.listingSchema = Joi.object({
     listing : Joi.object({
@@ -7,6 +8,7 @@ module.exports.listingSchema = Joi.object({
         location: Joi.string().required(),
         country : Joi.string().required(),
         price : Joi.number().required().min(0),
+        category : Joi.string().valid(...listingCategories).required(),
         image : Joi.string().allow("",null),
     }).required()
 })

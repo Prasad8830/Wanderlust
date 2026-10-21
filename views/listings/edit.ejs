@@ -38,6 +38,16 @@
             <input type="text" name="listing[country]" value="<%= listing.country %>" class="form-control" required>
             <div class="invalid-feedback">Please provide a valid country name.</div>
         </div>
+        <div class="mb-3">
+            <label for="category" class="form-label">Category</label>
+            <select name="listing[category]" id="category" class="form-select" required>
+                <option value="" <%= listing.category ? "" : "selected" %> disabled>Choose a category</option>
+                <% for(let c of categories){ if(c.value === "trending") continue; %>
+                <option value="<%= c.value %>" <%= listing.category === c.value ? "selected" : "" %>><%= c.label %></option>
+                <% } %>
+            </select>
+            <div class="invalid-feedback">Please choose a category.</div>
+        </div>
         <button class="btn btn-dark add-btn mt-3 mb-2">Edit</button>
     </form>
     </div>

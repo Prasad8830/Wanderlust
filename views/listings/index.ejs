@@ -11,54 +11,16 @@
         <!-- Scrollable Filters -->
         <div class="filters-container flex-grow-1" id="filters-scroll">
           <!-- Filters -->
-          <div class="filter">
-            <div><i class="fa-solid fa-fire"></i></div>
-            <p>Trending</p>
-          </div>
-          <div class="filter">
-            <div><i class="fa-solid fa-hotel"></i></div>
-            <p>Hotels</p>
-          </div>
-          <div class="filter">
-            <div><i class="fa-solid fa-house-chimney-window"></i></div>
-            <p>Rooms</p>
-          </div>
-          <div class="filter">
-            <div><i class="fa-solid fa-mountain-city"></i></div>
-            <p>Iconic Cities</p>
-          </div>
-          <div class="filter">
-            <div><i class="fa-solid fa-mountain-sun"></i></div>
-            <p>Mountains</p>
-          </div>
-          <div class="filter">
-            <div><i class="fa-brands fa-fort-awesome"></i></div>
-            <p>Castels</p>
-          </div>
-          <div class="filter">
-            <div><i class="fa-solid fa-person-swimming"></i></div>
-            <p>Amazing Pools</p>
-          </div>
-          <div class="filter">
-            <div><i class="fa-solid fa-umbrella-beach"></i></div>
-            <p>Beachfront</p>
-          </div>
-          <div class="filter">
-            <div><i class="fa-solid fa-campground"></i></div>
-            <p>Camping</p>
-          </div>
-          <div class="filter">
-            <div><i class="fa-solid fa-sailboat"></i></div>
-            <p>Boats</p>
-          </div>
-          <div class="filter">
-            <div><i class="fa-solid fa-igloo"></i></div>
-            <p>Domes</p>
-          </div>
-          <div class="filter">
-            <div><i class="fa-solid fa-snowflake"></i></div>
-            <p>Arctic</p>
-          </div>
+          <% for(let c of categories){ %>
+            <% const isActive = category === c.value; %>
+            <% const params = new URLSearchParams(); %>
+            <% if(!isActive) params.set("category", c.value); %>
+            <% if(q) params.set("q", q); %>
+            <a href="/listings<%= params.toString() ? "?" + params.toString() : "" %>" class="filter<%= isActive ? " active" : "" %>">
+              <div><i class="<%= c.icon %>"></i></div>
+              <p><%= c.label %></p>
+            </a>
+          <% } %>
         </div>
     
         <!-- Scroll Right Button -->
@@ -74,6 +36,13 @@
       </div>
       </div>
     </div>
+
+    <% if(allListings.length === 0){ %>
+      <div class="text-center mt-5">
+        <h5>No listings found</h5>
+        <p class="text-muted">Try a different search or <a href="/listings">view all listings</a>.</p>
+      </div>
+    <% } %>
 
     <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 row-cols-1 mt-3">
         <% for(let listing of allListings){ %>
