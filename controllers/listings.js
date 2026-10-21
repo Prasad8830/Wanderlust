@@ -2,6 +2,19 @@ const { response } = require('express');
 const Listing = require('../models/listing');
 const axios = require('axios');
 const { categories, listingCategories } = require('../utils/categories');
+const { cloudinary } = require('../cloudConfig');
+
+// removes an uploaded image from cloudinary, seed images hosted elsewhere are skipped
+const deleteImage = async (image)=>{
+    if(!image || !image.filename || !image.url || !image.url.includes("res.cloudinary.com")){
+      return;
+    }
+    try {
+      await cloudinary.uploader.destroy(image.filename);
+    } catch(err) {
+      console.log("could not delete image from cloudinary", err);
+    }
+};
 
 // returns the GeoJSON point for a location, or null if nothing matched
 const geocode = async (location)=>{
@@ -113,12 +126,15 @@ module.exports.updateListing = async (req, res)=>{
     }
     Object.assign(listing, req.body.listing);
 
+    let oldImage = null;
     if(typeof req.file !== "undefined"){
+      oldImage = {url: listing.image.url, filename: listing.image.filename};
       let url = req.file.path;
       let filename = req.file.filename;
       listing.image = {url, filename};
     }
     await listing.save();
+    await deleteImage(oldImage);
     req.flash("success", "Listing Updated!");
     res.redirect(`/listings/${id}`);
 };
@@ -126,7 +142,9 @@ module.exports.updateListing = async (req, res)=>{
 module.exports.destroyListing = async (req, res)=>{
     let { id } = req.params;
     let deletedListing = await Listing.findByIdAndDelete(id);
-    console.log(deletedListing);
+    if(deletedListing){
+      await deleteImage(deletedListing.image);
+    }
     req.flash("success", "Listing Deleted!");
     res.redirect("/listings");
 };
