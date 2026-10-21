@@ -42,7 +42,7 @@ app.use(helmet({
       styleSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com", "https://fonts.googleapis.com", "https://unpkg.com"],
       fontSrc: ["'self'", "https://cdnjs.cloudflare.com", "https://fonts.gstatic.com"],
       imgSrc: ["'self'", "data:", "blob:", "https://res.cloudinary.com", "https://images.unsplash.com", "https://plus.unsplash.com", "https://api.maptiler.com"],
-      connectSrc: ["'self'", "https://api.maptiler.com"],
+      connectSrc: ["'self'", "https://api.maptiler.com", "https://cdn.jsdelivr.net", "https://unpkg.com"],
       workerSrc: ["'self'", "blob:"],
       childSrc: ["blob:"],
     },
