@@ -4,9 +4,11 @@ const multer  = require('multer');
 const {storage} = require('../cloudConfig');
 const upload = multer({ storage });
 const wrapAsync = require('../utils/wrapAsync')
-const {isLoggedIn, isOwner, validateListing} = require('../middleware');
+const {isLoggedIn, isOwner, validateListing, validateId} = require('../middleware');
 //contollers
 const listingController = require('../controllers/listings');
+
+router.param("id", validateId);
 
 //router.route - used when there are request for same path
 router.route("/")
