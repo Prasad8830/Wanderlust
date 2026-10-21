@@ -14,6 +14,8 @@ const ExpressError = require('./utils/ExpressError');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const flash = require('connect-flash');
+const helmet = require('helmet');
+const crypto = require('crypto');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const User = require('./models/user');
@@ -24,6 +26,28 @@ const userRouter = require('./routes/user');
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname,'views'));
+
+// render runs the app behind a proxy, needed for secure cookies and real client ips
+app.set('trust proxy', 1);
+
+//security headers, the nonce lets the inline script on the show page run
+app.use((req,res,next)=>{
+  res.locals.cspNonce = crypto.randomBytes(16).toString("base64");
+  next();
+});
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      scriptSrc: ["'self'", "https://cdn.jsdelivr.net", "https://unpkg.com", (req,res)=>`'nonce-${res.locals.cspNonce}'`],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com", "https://fonts.googleapis.com", "https://unpkg.com"],
+      fontSrc: ["'self'", "https://cdnjs.cloudflare.com", "https://fonts.gstatic.com"],
+      imgSrc: ["'self'", "data:", "blob:", "https://res.cloudinary.com", "https://images.unsplash.com", "https://plus.unsplash.com", "https://api.maptiler.com"],
+      connectSrc: ["'self'", "https://api.maptiler.com"],
+      workerSrc: ["'self'", "blob:"],
+      childSrc: ["blob:"],
+    },
+  },
+}));
 
 app.use(express.urlencoded({extended: true}));
 app.use(methodOverride("_method"));
@@ -60,10 +84,12 @@ const sessionOptions = {
   store: store,
   secret: secret,
   resave: false,
-  saveUninitialized: true,
+  saveUninitialized: false,
   cookie: {
     maxAge: 1000*60*60*24*7,
-    httpOnly: true
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
   }
 };
 
